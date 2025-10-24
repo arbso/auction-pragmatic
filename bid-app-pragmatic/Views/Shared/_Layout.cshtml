@@ -28,12 +28,24 @@
                         </li>
                     </ul>
 
+                    @using Microsoft.AspNetCore.Http
+
                     <ul class="navbar-nav">
-                        @if (ViewBag.Username != null)
+                        @{
+                            var username = Context.Session.GetString("Username");
+                            var wallet = Context.Session.GetString("Wallet");
+                        }
+
+                        @if (!string.IsNullOrEmpty(username))
                         {
                             <li class="nav-item">
-                                <span class="navbar-text me-2">Hello, <strong>@ViewBag.Username</strong>!</span>
+                                <span class="navbar-text me-3">Hello, <strong>@username</strong>!</span>
                             </li>
+
+                            <li class="nav-item">
+                                <span class="navbar-text me-3">Wallet: <strong>$@wallet</strong></span>
+                            </li>
+
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-danger btn-sm">Logout</button>
@@ -50,6 +62,7 @@
                             </li>
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>

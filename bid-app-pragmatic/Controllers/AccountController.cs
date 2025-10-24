@@ -49,6 +49,7 @@ namespace bid_app_pragmatic.Controllers
 
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetString("Wallet", user.Wallet.ToString("F2"));
 
                 _logger.LogInformation($"User logged in: {user.Username}");
                 return RedirectToAction("Index", "Home");
@@ -87,6 +88,7 @@ namespace bid_app_pragmatic.Controllers
 
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetString("Wallet", user.Wallet.ToString("F2"));
 
                 _logger.LogInformation($"New user registered: {user.Username}");
                 TempData["SuccessMessage"] = $"Welcome {user.Username}!";
