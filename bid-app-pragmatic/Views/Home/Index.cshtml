@@ -1,7 +1,21 @@
 ﻿@{
-    ViewData["Title"] = "Pragmatic Auction";
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the Auction</h1>
+<div class="container mt-5 text-center">
+    <h1>Welcome to Bid App</h1>
+
+    @if (ViewBag.Username != null)
+    {
+        <p class="lead">Hello, <strong>@ViewBag.Username</strong>!</p>
+
+    }
+    else
+    {
+        <p class="lead">
+            Please <a asp-controller="Account" asp-action="Login">login</a> or
+            <a asp-controller="Account" asp-action="Register">register</a> to continue.
+        </p>
+    }
 </div>
