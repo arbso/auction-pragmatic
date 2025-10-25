@@ -5,47 +5,65 @@
 }
 
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-body">
-                <h2 class="card-title mb-4">Create New Auction</h2>
-                
-                <form asp-action="Create" method="post">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <h2 class="card-title mb-4 text-center fw-bold">Create New Auction</h2>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Create" method="post" novalidate>
                     @Html.AntiForgeryToken()
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                    
-                    <div class="mb-3">
-                        <label asp-for="Title" class="form-label"></label>
-                        <input asp-for="Title" class="form-control" placeholder="Enter a catchy title for your item" />
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label fw-semibold"></label>
+                        <input asp-for="Title" class="form-control form-control-lg shadow-sm" placeholder="Enter your item's name" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label"></label>
-                        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Describe your item in detail"></textarea>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Description" class="form-control shadow-sm" rows="5" placeholder="Describe your item in detail"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="StartingPrice" class="form-label"></label>
-                            <div class="input-group">
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="StartingPrice" class="form-label fw-semibold"></label>
+                            <div class="input-group shadow-sm">
                                 <span class="input-group-text">$</span>
                                 <input asp-for="StartingPrice" class="form-control" placeholder="0.00" step="0.01" />
                             </div>
                             <span asp-validation-for="StartingPrice" class="text-danger"></span>
                         </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="EndDate" class="form-label"></label>
-                            <input asp-for="EndDate" class="form-control" type="datetime-local" />
+                        <div class="col-md-6">
+                            <label asp-for="EndDate" class="form-label fw-semibold"></label>
+                            <input asp-for="EndDate" class="form-control shadow-sm" type="datetime-local" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                     </div>
-                    
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-success btn-lg">Create Auction</button>
-                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+                    <div class="d-grid gap-3 mt-4">
+                        <button type="submit" class="btn btn-gradient btn-lg fw-bold">
+                            <i class="bi bi-plus-circle me-2"></i> Create Auction
+                        </button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg">
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
@@ -54,12 +72,36 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            document.getElementById('EndDate').min = now.toISOString().slice(0,16);
+            document.getElementById('EndDate').min = now.toISOString().slice(0, 16);
         });
     </script>
 }
+
+<style>
+    .btn-gradient {
+        background: linear-gradient(90deg, #0d6efd, #6610f2);
+        color: #fff;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .form-control.shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
+    }
+</style>

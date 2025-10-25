@@ -3,82 +3,139 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - bid_app_pragmatic</title>
+    <title>@ViewData["Title"] - Auction App Pragmatic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/bid_app_pragmatic.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #212529 0%, #343a40 100%);
+        }
+
+        .navbar-brand {
+            color: #f8f9fa !important;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            color: #dcdcdc !important;
+            transition: color 0.2s;
+        }
+
+            .nav-link:hover {
+                color: #ffffff !important;
+            }
+
+        .auction-hero {
+            background: linear-gradient(120deg, #0d6efd, #6610f2);
+            border-radius: 1rem;
+            margin-top: 1rem;
+        }
+
+        .auction-card {
+            transition: all 0.2s ease;
+        }
+
+            .auction-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            }
+
+        footer {
+            background: linear-gradient(90deg, #212529, #343a40);
+            color: #adb5bd;
+        }
+
+            footer a {
+                color: #f8f9fa;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark sticky-top shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">bid_app_pragmatic</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-hammer"></i> Auction App Pragmatic
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Auctions</a>
                         </li>
                     </ul>
 
                     @using Microsoft.AspNetCore.Http
+                    @{
+                        var username = Context.Session.GetString("Username");
+                        var wallet = Context.Session.GetString("Wallet");
+                    }
 
-                    <ul class="navbar-nav">
-                        @{
-                            var username = Context.Session.GetString("Username");
-                            var wallet = Context.Session.GetString("Wallet");
-                        }
-
-                        @if (!string.IsNullOrEmpty(username))
-                        {
-                            <li class="nav-item">
-                                <span class="navbar-text me-3">Hello, <strong>@username</strong>!</span>
-                            </li>
-
-                            <li class="nav-item">
-                                <span class="navbar-text me-3">Wallet: <strong>$@wallet</strong></span>
-                            </li>
-
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                        }
-                    </ul>
-
+                    @if (!string.IsNullOrEmpty(username))
+                    {
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> @username
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item-text">Wallet: <strong>$@wallet</strong></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-light me-2" asp-controller="Account" asp-action="Login">Login</a>
+                        <a class="btn btn-primary" asp-controller="Account" asp-action="Register">Register</a>
+                    }
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container my-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="text-center py-4 mt-5">
         <div class="container">
-            &copy; 2025 - bid_app_pragmatic - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - <strong>Auction App Pragmatic</strong> -
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
