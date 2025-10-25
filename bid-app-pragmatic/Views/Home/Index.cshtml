@@ -1,21 +1,98 @@
-﻿@{
-    ViewData["Title"] = "Home";
-    Layout = "_Layout";
+﻿@model IEnumerable<bid_app_pragmatic.Models.Auction>
+
+@{
+    ViewData["Title"] = "Current Auctions";
 }
 
-<div class="container mt-5 text-center">
-    <h1>Welcome to Bid App</h1>
-
-    @if (ViewBag.Username != null)
-    {
-        <p class="lead">Hello, <strong>@ViewBag.Username</strong>!</p>
-
-    }
-    else
-    {
-        <p class="lead">
-            Please <a asp-controller="Account" asp-action="Login">login</a> or
-            <a asp-controller="Account" asp-action="Register">register</a> to continue.
-        </p>
-    }
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Current Auctions</h2>
+        <p class="text-muted">Browse all active auctions and place your bids</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a asp-controller="Auction" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New Auction
+        </a>
+    </div>
 </div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">No Active Auctions</h4>
+        <p>There are currently no active auctions. Be the first to create one!</p>
+        <hr>
+        <p class="mb-0">
+            <a asp-controller="Auction" asp-action="Create" class="btn btn-primary">Create an Auction</a>
+        </p>
+    </div>
+}
+else
+{
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Current Price</th>
+                            <th>Creator</th>
+                            <th>Time Remaining</th>
+                            <th>End Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var auction in Model)
+                        {
+                            var timeRemaining = auction.EndDate - DateTime.Now;
+                            var timeRemainingText = "";
+                            var timeClass = "";
+
+                            if (timeRemaining.TotalDays >= 1)
+                            {
+                                timeRemainingText = $"{(int)timeRemaining.TotalDays} days";
+                                timeClass = "text-success";
+                            }
+                            else if (timeRemaining.TotalHours >= 1)
+                            {
+                                timeRemainingText = $"{(int)timeRemaining.TotalHours} hours";
+                                timeClass = "text-warning";
+                            }
+                            else if (timeRemaining.TotalMinutes >= 1)
+                            {
+                                timeRemainingText = $"{(int)timeRemaining.TotalMinutes} minutes";
+                                timeClass = "text-danger";
+                            }
+                            else
+                            {
+                                timeRemainingText = "Ending soon";
+                                timeClass = "text-danger fw-bold";
+                            }
+
+                            <tr>
+                                <td>
+                                    <a asp-controller="Auction" asp-action="Details" asp-route-id="@auction.AuctionId" class="text-decoration-none fw-bold">
+                                        @auction.Title
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">$@((auction.CurrentPrice ?? auction.StartingPrice).ToString("N2"))</span>
+                                </td>
+                                <td>@auction.Creator.Username</td>
+                                <td class="@timeClass">@timeRemainingText</td>
+                                <td>@auction.EndDate.ToString("MM/dd/yyyy hh:mm tt")</td>
+                                <td>
+                                    <a asp-controller="Auction" asp-action="Details" asp-route-id="@auction.AuctionId" class="btn btn-sm btn-primary">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

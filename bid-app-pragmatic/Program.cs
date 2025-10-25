@@ -4,10 +4,9 @@ using bid_app_pragmatic.Repositories.Implementations;
 using bid_app_pragmatic.Repositories.Interfaces;
 using bid_app_pragmatic.Services.Implementations;
 using bid_app_pragmatic.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication;
+using bid_app_pragmatic.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllersWithViews();
 
@@ -34,6 +33,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.AddFile("Logs/auction-{Date}.txt");
+
 
 var app = builder.Build();
 
