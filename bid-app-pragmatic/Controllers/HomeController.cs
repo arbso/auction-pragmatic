@@ -24,7 +24,6 @@ namespace bid_app_pragmatic.Controllers
             try
             {
                 _logger.LogInformation("Loading home page - fetching auctions");
-
                 await _auctionService.ProcessEndedAuctionsAsync();
 
                 var userId = HttpContext.Session.GetInt32("UserId");
@@ -35,9 +34,10 @@ namespace bid_app_pragmatic.Controllers
                     var user = await _userService.GetUserByIdAsync(userId.Value);
                     if (user != null)
                     {
-                        ViewBag.Username = user.Username;
-                        ViewBag.Wallet = user.Wallet;
-                        _logger.LogInformation($"User loaded: {user.Username}, Wallet: {user.Wallet}");
+                        HttpContext.Session.SetString("Username", user.Username);
+                        HttpContext.Session.SetString("Wallet", user.Wallet.ToString("F2"));
+
+                        _logger.LogInformation($"Session refreshed for user: {user.Username}, Wallet: {user.Wallet}");
                     }
                 }
 
