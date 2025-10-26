@@ -15,9 +15,7 @@
 @if (Model == null || !Model.Any())
 {
     <div class="text-center py-5">
-        <img src="~/images/empty-auctions.svg" alt="No auctions" class="mb-4" style="max-width: 200px;" />
         <h4 class="fw-bold mb-2">No Active Auctions</h4>
-        <p class="text-muted mb-4">Be the first to add an auction!</p>
         <a asp-controller="Auction" asp-action="Create" class="btn btn-primary">Create an Auction</a>
     </div>
 }
