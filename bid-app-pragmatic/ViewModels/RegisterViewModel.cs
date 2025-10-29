@@ -12,7 +12,7 @@
             public string Username { get; set; }
 
             [Required(ErrorMessage = "Email is required")]
-            [EmailAddress(ErrorMessage = "Invalid email address")]
+            [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Invalid email address")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
